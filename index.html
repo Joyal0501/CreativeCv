@@ -6,234 +6,279 @@
 <title>Joyal Nilesh Shah — The Web</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --void:#070a14;
-  --deep:#101a33;
-  --silk:#dfe6f2;
-  --crimson:#e0233c;
-  --cobalt:#3d6ee8;
-  --ash:#7d879e;
-  --display:'Syne',sans-serif;
-  --body:'Space Grotesk',sans-serif;
-  --mono:'JetBrains Mono',monospace;
+  --void:#070a14; --deep:#101a33; --silk:#dfe6f2;
+  --crimson:#e0233c; --cobalt:#3d6ee8; --ash:#7d879e;
+  --display:'Syne',sans-serif; --body:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+  --halftone:radial-gradient(circle at 1px 1px, rgba(224,35,60,.55) 1px, transparent 0);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{
-  background:var(--void);
-  color:var(--silk);
-  font-family:var(--body);
-  overflow:hidden;
-  -webkit-font-smoothing:antialiased;
-}
-#glow{
-  position:fixed;inset:0;
-  background:radial-gradient(ellipse 70% 60% at 50% 48%, var(--deep) 0%, transparent 70%);
-  pointer-events:none;z-index:0;
-}
-#grain{
-  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+body{background:var(--void);color:var(--silk);font-family:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+#glow{position:fixed;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 46%, var(--deep) 0%, transparent 70%);pointer-events:none;z-index:0}
+#grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-/* ---------- header ---------- */
-header{
-  position:fixed;top:0;left:0;right:0;z-index:20;
-  display:flex;justify-content:space-between;align-items:flex-start;
-  padding:26px 34px;
-  opacity:0;animation:fadeUp .9s 2.1s cubic-bezier(.16,1,.3,1) forwards;
-}
-.nameblock h1{
-  font-family:var(--display);font-weight:800;
-  font-size:clamp(19px,2.1vw,27px);letter-spacing:-.02em;line-height:1;
-}
-.nameblock h1 em{font-style:normal;color:var(--crimson)}
-.nameblock p{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--ash);margin-top:9px;
-}
-.meta{text-align:right;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--ash);line-height:2}
+/* ================= COVER (auto-dissolves, never blocks) ================= */
+#cover{position:fixed;inset:0;z-index:60;background:var(--void);display:grid;place-items:center;cursor:pointer;
+  transition:opacity .8s cubic-bezier(.7,0,.3,1),transform .8s cubic-bezier(.7,0,.3,1)}
+#cover.out{opacity:0;transform:scale(1.12);pointer-events:none}
+#coverdots{position:absolute;inset:0;background-image:var(--halftone);background-size:7px 7px;opacity:.16;
+  -webkit-mask-image:radial-gradient(ellipse 62% 62% at 50% 50%,#000 5%,transparent 72%);
+  mask-image:radial-gradient(ellipse 62% 62% at 50% 50%,#000 5%,transparent 72%)}
+#slashes{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#slashes i{position:absolute;left:0;height:1px;width:0;
+  background:linear-gradient(90deg,transparent,rgba(224,35,60,.5),transparent);
+  animation:slash 1.1s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes slash{to{width:100%}}
+.cover-inner{position:relative;z-index:3;text-align:center;padding:24px;max-width:760px}
+#seal{width:96px;height:96px;margin:0 auto 26px;display:block;opacity:0;animation:sealIn 1s .1s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes sealIn{from{opacity:0;transform:scale(.6) rotate(-28deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+#seal .sw{fill:none;stroke:var(--crimson);stroke-width:1.6}
+#seal .sr{fill:none;stroke:var(--silk);stroke-width:1.1;stroke-opacity:.5}
+#seal text{fill:var(--silk);font-family:var(--display);font-weight:800;font-size:25px}
+.eyebrow-top{font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--crimson);margin-bottom:22px;opacity:0;animation:rise .7s .4s forwards}
+.cover-inner h1{font-family:var(--display);font-weight:800;line-height:.87;letter-spacing:-.045em;
+  font-size:clamp(48px,10vw,118px);text-transform:uppercase}
+.cover-inner h1 span{display:block;opacity:0;transform:translateY(44px) skewY(5deg);animation:slam .8s cubic-bezier(.16,1,.3,1) forwards}
+.cover-inner h1 span:nth-child(1){animation-delay:.5s}
+.cover-inner h1 span:nth-child(2){animation-delay:.62s;color:var(--crimson);text-shadow:3px 3px 0 rgba(61,110,232,.55)}
+@keyframes slam{to{opacity:1;transform:translateY(0) skewY(0)}}
+.rule{height:3px;width:0;background:var(--crimson);margin:24px auto 0;animation:grow .75s .88s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes grow{to{width:124px}}
+.cover-inner .tag{font-size:clamp(13px,1.6vw,15.5px);color:#b6bfd2;margin:22px auto 0;line-height:1.6;
+  opacity:0;animation:rise .7s 1s forwards;max-width:470px}
+.cover-inner .tag b{color:var(--silk);font-weight:500}
+#enter{margin-top:38px;opacity:0;animation:rise .7s 1.2s forwards;
+  font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.26em;text-transform:uppercase;
+  background:transparent;color:var(--silk);border:1.5px solid var(--crimson);padding:16px 38px;cursor:pointer;
+  position:relative;overflow:hidden;transition:color .35s;isolation:isolate}
+#enter::before{content:'';position:absolute;inset:0;background:var(--crimson);transform:translateY(101%);
+  transition:transform .4s cubic-bezier(.16,1,.3,1);z-index:-1}
+#enter:hover::before{transform:translateY(0)}
+#enter:hover{color:#fff}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.webcorner{position:absolute;width:180px;height:180px;pointer-events:none;opacity:0;animation:rise 1.2s .25s forwards}
+.webcorner line,.webcorner path{fill:none;stroke:var(--silk);stroke-opacity:.3;stroke-width:.9}
+.wc-tl{top:0;left:0}.wc-tr{top:0;right:0;transform:scaleX(-1)}
+.wc-bl{bottom:0;left:0;transform:scaleY(-1)}.wc-br{bottom:0;right:0;transform:scale(-1,-1)}
+
+/* ================= HEADER ================= */
+header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:flex-start;
+  padding:22px 30px;opacity:0;pointer-events:none;transition:opacity .8s .4s}
+header.on{opacity:1;pointer-events:auto}
+.hleft{display:flex;align-items:center;gap:13px}
+#minimark{width:34px;height:34px;flex-shrink:0}
+#minimark .sw{fill:none;stroke:var(--crimson);stroke-width:2}
+#minimark .sr{fill:none;stroke:var(--silk);stroke-width:1.4;stroke-opacity:.45}
+#minimark text{display:none}
+.nameblock h2{font-family:var(--display);font-weight:800;font-size:clamp(15px,1.7vw,20px);letter-spacing:-.02em;line-height:1;text-transform:uppercase}
+.nameblock h2 em{font-style:normal;color:var(--crimson)}
+.nameblock p{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);margin-top:6px}
+.meta{text-align:right;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--ash);line-height:2}
 .meta span{color:var(--silk)}
 
-/* ---------- stage ---------- */
-#stage{position:fixed;inset:0;z-index:5;display:grid;place-items:center}
-svg#web{width:100%;height:100%;display:block}
+/* ================= NAV RAIL ================= */
+#rail{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:45;
+  display:flex;align-items:stretch;gap:0;opacity:0;pointer-events:none;transition:opacity .7s;
+  background:rgba(8,11,22,.82);backdrop-filter:blur(9px);border:1px solid rgba(223,230,242,.14);
+  clip-path:polygon(13px 0,100% 0,100% calc(100% - 13px),calc(100% - 13px) 100%,0 100%,0 13px);
+  max-width:94vw;overflow-x:auto;scrollbar-width:none}
+#rail::-webkit-scrollbar{display:none}
+#rail.on{opacity:1;pointer-events:auto}
+#rail button{background:transparent;border:none;border-right:1px solid rgba(223,230,242,.1);cursor:pointer;
+  padding:13px 19px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.28s;position:relative;white-space:nowrap}
+#rail button:last-child{border-right:none}
+#rail button i{font-family:var(--mono);font-weight:700;font-size:8.5px;letter-spacing:.16em;color:var(--ash);font-style:normal;transition:.28s}
+#rail button b{font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.01em;color:#aab3c6;text-transform:uppercase;transition:.28s}
+#rail button::after{content:'';position:absolute;left:19px;right:19px;bottom:0;height:2px;background:var(--crimson);transform:scaleX(0);transition:transform .3s cubic-bezier(.16,1,.3,1)}
+#rail button:hover b,#rail button.sel b{color:var(--silk)}
+#rail button:hover i,#rail button.sel i{color:var(--crimson)}
+#rail button:hover::after,#rail button.sel::after{transform:scaleX(1)}
+#rail button:focus-visible{outline:1px solid var(--cobalt);outline-offset:-3px}
 
-.strand{fill:none;stroke:var(--silk);stroke-opacity:.17;stroke-width:.85;transition:stroke-opacity .45s,stroke .45s}
+/* ================= WEB STAGE ================= */
+#stage{position:fixed;inset:0;z-index:5;display:grid;place-items:center;opacity:0;transition:opacity .7s .3s}
+#stage.on{opacity:1}
+svg#web{width:100%;height:100%;display:block}
+.strand{fill:none;stroke:var(--silk);stroke-opacity:.17;stroke-width:.85;transition:stroke-opacity .45s,stroke .45s,stroke-width .45s}
 .strand.ring{stroke-opacity:.13}
-.strand.lit{stroke:var(--crimson);stroke-opacity:.85;stroke-width:1.4}
+.strand.lit{stroke:var(--crimson);stroke-opacity:.9;stroke-width:1.5}
 .dew{fill:var(--cobalt);opacity:0}
 .dew.on{animation:twinkle 5s ease-in-out infinite}
 @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.75}}
-
 #strands{transform-origin:500px 350px;animation:breathe 9s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.007)}}
-
-/* ---------- nodes ---------- */
+#shooter{stroke:var(--crimson);stroke-width:.9;stroke-opacity:0;fill:none;transition:stroke-opacity .4s}
+#shooter.on{stroke-opacity:.28}
+#shootertip{fill:var(--crimson);opacity:0;transition:opacity .4s}
+#shootertip.on{opacity:.8}
 .node{cursor:pointer;opacity:0}
 .node.in{animation:popIn .7s cubic-bezier(.16,1,.3,1) forwards}
 @keyframes popIn{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
-.node circle.disc{
-  fill:var(--void);stroke:var(--silk);stroke-opacity:.5;stroke-width:1.1;
-  transition:stroke .3s,fill .3s,stroke-width .3s;
-}
-.node circle.core{fill:var(--silk);opacity:.55;transition:fill .3s,opacity .3s,r .3s}
-.node:hover circle.disc,.node.active circle.disc{stroke:var(--crimson);stroke-opacity:1;stroke-width:1.8;fill:#12060b}
+.node circle.disc{fill:var(--void);stroke:var(--silk);stroke-opacity:.5;stroke-width:1.2;transition:.3s}
+.node circle.core{fill:var(--silk);opacity:.55;transition:.3s}
+.node:hover circle.disc,.node.active circle.disc{stroke:var(--crimson);stroke-opacity:1;stroke-width:2;fill:#14060c}
 .node:hover circle.core,.node.active circle.core{fill:var(--crimson);opacity:1}
-.node text.lbl{
-  font-family:var(--display);font-weight:700;font-size:16.5px;letter-spacing:-.01em;
-  fill:var(--silk);transition:fill .3s;
-}
-.node text.sub{
-  font-family:var(--mono);font-size:10px;letter-spacing:.13em;
-  fill:var(--ash);text-transform:uppercase;transition:fill .3s;
-}
+.node text.lbl{font-family:var(--display);font-weight:700;font-size:17px;fill:var(--silk);transition:fill .3s;text-transform:uppercase}
+.node text.sub{font-family:var(--mono);font-size:10px;letter-spacing:.13em;fill:var(--ash);text-transform:uppercase;transition:fill .3s}
 .node:hover text.lbl,.node.active text.lbl{fill:var(--crimson)}
 .node:hover text.sub,.node.active text.sub{fill:var(--silk)}
 .node .pulse{fill:none;stroke:var(--crimson);stroke-width:1.2;opacity:0}
-.node:hover .pulse{animation:ripple 1.5s ease-out infinite}
-@keyframes ripple{0%{r:18;opacity:.7}100%{r:64;opacity:0}}
+.node:hover .pulse,.node.active .pulse{animation:ripple 1.5s ease-out infinite}
+@keyframes ripple{0%{r:18;opacity:.7}100%{r:66;opacity:0}}
 .node:focus{outline:none}
-.node:focus-visible circle.disc{stroke:var(--cobalt);stroke-width:2.4;stroke-opacity:1}
-
-#hub{opacity:0;animation:popIn .9s 1.75s cubic-bezier(.16,1,.3,1) forwards}
-#hub .halo{fill:none;stroke:var(--crimson);stroke-width:1.4;stroke-opacity:.55}
+.node:focus-visible circle.disc{stroke:var(--cobalt);stroke-width:2.6;stroke-opacity:1}
+#hub{opacity:0}
+#hub.in{animation:popIn .9s cubic-bezier(.16,1,.3,1) forwards}
+#hub .halo{fill:none;stroke:var(--crimson);stroke-width:1.5;stroke-opacity:.6}
 #hub .halo2{fill:none;stroke:var(--silk);stroke-width:.7;stroke-opacity:.22}
 #hubfallback{font-family:var(--display);font-weight:800;font-size:33px;fill:var(--silk);opacity:.85}
+#connector{fill:none;stroke:var(--crimson);stroke-width:1.3;stroke-opacity:0;transition:stroke-opacity .5s}
+#connector.on{stroke-opacity:.75}
 
-#connector{fill:none;stroke:var(--crimson);stroke-width:1.2;stroke-opacity:0;transition:stroke-opacity .5s}
-#connector.on{stroke-opacity:.7}
-
-/* ---------- hint ---------- */
-#hint{
-  position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:20;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--ash);opacity:0;animation:hintIn 1s 2.6s forwards;
-  display:flex;align-items:center;gap:11px;text-align:center;
-}
-#hint b{width:5px;height:5px;border-radius:50%;background:var(--crimson);animation:blip 2.4s infinite}
-@keyframes blip{0%,100%{opacity:.25;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
-#hint.gone{animation:fadeOut .4s forwards}
-@keyframes fadeOut{to{opacity:0;visibility:hidden}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes hintIn{
-  from{opacity:0;transform:translateX(-50%) translateY(10px)}
-  to{opacity:1;transform:translateX(-50%) translateY(0)}
-}
-
-/* ---------- panel ---------- */
-#scrim{position:fixed;inset:0;background:rgba(4,6,12,.55);backdrop-filter:blur(3px);z-index:40;opacity:0;visibility:hidden;transition:.45s}
+/* ================= PANEL ================= */
+#scrim{position:fixed;inset:0;background:rgba(4,6,12,.55);backdrop-filter:blur(2px);z-index:40;opacity:0;visibility:hidden;transition:.45s}
 #scrim.on{opacity:1;visibility:visible}
-
-#panel{
-  position:fixed;top:0;right:0;bottom:0;width:min(486px,94vw);z-index:50;
-  background:linear-gradient(160deg,#0c1224 0%,#080b16 100%);
-  border-left:1px solid rgba(224,35,60,.35);
-  transform:translateX(102%);transition:transform .62s cubic-bezier(.16,1,.3,1);
-  display:flex;flex-direction:column;
-  box-shadow:-40px 0 90px rgba(0,0,0,.6);
-}
+#panel{position:fixed;top:0;right:0;bottom:0;width:min(500px,95vw);z-index:50;
+  background:linear-gradient(160deg,#0c1224 0%,#080b16 100%);border-left:1px solid rgba(224,35,60,.4);
+  transform:translateX(102%);transition:transform .6s cubic-bezier(.16,1,.3,1);
+  display:flex;flex-direction:column;box-shadow:-40px 0 90px rgba(0,0,0,.65)}
 #panel.on{transform:translateX(0)}
-.phead{padding:32px 36px 22px;border-bottom:1px solid rgba(223,230,242,.1);flex-shrink:0;position:relative}
-.phead .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--crimson);margin-bottom:12px;display:block}
-.phead h2{font-family:var(--display);font-weight:800;font-size:33px;letter-spacing:-.025em;line-height:1}
-#close{
-  position:absolute;top:28px;right:30px;width:34px;height:34px;border-radius:50%;
-  border:1px solid rgba(223,230,242,.28);background:transparent;color:var(--silk);
-  cursor:pointer;font-size:17px;line-height:1;transition:.28s;font-family:var(--body);
-}
+.phead{padding:32px 36px 22px;border-bottom:1px solid rgba(223,230,242,.11);flex-shrink:0;position:relative;overflow:hidden}
+.phead::before{content:'';position:absolute;inset:0;background-image:var(--halftone);background-size:6px 6px;opacity:.2;
+  -webkit-mask-image:linear-gradient(200deg,#000,transparent 62%);mask-image:linear-gradient(200deg,#000,transparent 62%)}
+.pcorner{position:absolute;top:-6px;right:-6px;width:116px;height:116px;opacity:.4}
+.pcorner line,.pcorner path{fill:none;stroke:var(--crimson);stroke-width:.9;stroke-opacity:.75}
+.phead .eyebrow{position:relative;font-family:var(--mono);font-weight:700;font-size:9.5px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--crimson);margin-bottom:12px;display:block}
+.phead h3{position:relative;font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:-.03em;line-height:1;text-transform:uppercase}
+#close{position:absolute;top:28px;right:28px;width:34px;height:34px;border-radius:50%;z-index:6;
+  border:1px solid rgba(223,230,242,.3);background:rgba(7,10,20,.75);color:var(--silk);cursor:pointer;
+  font-size:15px;line-height:1;transition:.28s;font-family:var(--body)}
 #close:hover{background:var(--crimson);border-color:var(--crimson);transform:rotate(90deg)}
-.pbody{padding:28px 36px 60px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:rgba(224,35,60,.5) transparent}
+.pbody{padding:24px 36px 30px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:rgba(224,35,60,.5) transparent}
 .pbody::-webkit-scrollbar{width:4px}
 .pbody::-webkit-scrollbar-thumb{background:rgba(224,35,60,.5)}
 
-.entry{padding:19px 0;border-bottom:1px solid rgba(223,230,242,.08);opacity:0;animation:slip .55s forwards}
+/* panel footer navigation */
+.pfoot{flex-shrink:0;display:flex;border-top:1px solid rgba(223,230,242,.12);background:rgba(6,9,18,.6)}
+.pfoot button{flex:1;background:transparent;border:none;cursor:pointer;padding:16px 18px;text-align:left;
+  color:#aab3c6;transition:.28s;font-family:var(--body);display:block}
+.pfoot button:first-child{border-right:1px solid rgba(223,230,242,.12)}
+.pfoot button:last-child{text-align:right}
+.pfoot button i{display:block;font-style:normal;font-family:var(--mono);font-weight:700;font-size:8.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--ash);margin-bottom:6px;transition:.28s}
+.pfoot button b{font-family:var(--display);font-weight:700;font-size:14px;text-transform:uppercase;transition:.28s}
+.pfoot button:hover{background:rgba(224,35,60,.08)}
+.pfoot button:hover i{color:var(--crimson)}
+.pfoot button:hover b{color:var(--silk)}
+
+.entry{padding:19px 0;border-bottom:1px solid rgba(223,230,242,.08)}
 .entry:last-child{border-bottom:none}
-@keyframes slip{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .entry .top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:5px}
-.entry h3{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:-.01em;line-height:1.3}
+.entry h4{font-family:var(--display);font-weight:700;font-size:17.5px;letter-spacing:-.012em;line-height:1.3}
 .entry .yr{font-family:var(--mono);font-size:10.5px;color:var(--cobalt);white-space:nowrap;letter-spacing:.06em}
 .entry .org{font-size:13px;color:var(--ash);margin-bottom:11px;line-height:1.45}
 .entry ul{list-style:none}
-.entry li{
-  font-size:13.5px;line-height:1.62;color:#c2cadb;padding-left:17px;position:relative;margin-bottom:7px;
-}
+.entry li{font-size:13.5px;line-height:1.62;color:#c2cadb;padding-left:17px;position:relative;margin-bottom:7px}
 .entry li::before{content:'';position:absolute;left:2px;top:9px;width:5px;height:5px;border:1px solid var(--crimson);transform:rotate(45deg)}
 .entry li strong{color:var(--silk);font-weight:500}
-.grouplabel{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--crimson);margin:15px 0 9px;
-}
-.grouplabel:first-child{margin-top:0}
+.grouplabel{font-family:var(--mono);font-weight:700;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--crimson);margin:16px 0 9px;display:flex;align-items:center;gap:9px}
+.grouplabel::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(224,35,60,.4),transparent)}
+.reveal{opacity:0;animation:slip .55s forwards}
+@keyframes slip{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.callout{position:relative;margin:2px 0;padding:15px 18px;background:#0a1020;border-left:3px solid var(--crimson);
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 13px),calc(100% - 13px) 100%,0 100%);
+  font-size:13.5px;line-height:1.6;color:#cdd5e4}
+.callout::before{content:'';position:absolute;inset:0;background-image:var(--halftone);background-size:6px 6px;opacity:.14;
+  -webkit-mask-image:linear-gradient(115deg,#000,transparent 55%);mask-image:linear-gradient(115deg,#000,transparent 55%)}
+.callout b{color:var(--silk);font-weight:500}
+.callout em{display:block;font-style:normal;font-family:var(--mono);font-weight:700;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--crimson);margin-bottom:8px}
+.stat{display:flex;gap:11px;flex-wrap:wrap;margin-top:15px}
+.stat div{position:relative;border:1px solid rgba(223,230,242,.17);padding:14px 16px;flex:1;min-width:118px;overflow:hidden;
+  clip-path:polygon(11px 0,100% 0,100% calc(100% - 11px),calc(100% - 11px) 100%,0 100%,0 11px)}
+.stat div::before{content:'';position:absolute;inset:0;background-image:var(--halftone);background-size:5px 5px;opacity:.22;
+  -webkit-mask-image:radial-gradient(circle at 80% 15%,#000,transparent 68%);mask-image:radial-gradient(circle at 80% 15%,#000,transparent 68%)}
+.stat b{position:relative;display:block;font-family:var(--display);font-weight:800;font-size:25px;color:var(--crimson);letter-spacing:-.03em;line-height:1}
+.stat span{position:relative;font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--ash);margin-top:7px;display:block;line-height:1.55}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.chips span{font-family:var(--mono);font-size:11px;padding:6px 12px;border:1px solid rgba(223,230,242,.18);color:#c2cadb;transition:.25s;
+  clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)}
+.chips span:hover{border-color:var(--crimson);color:var(--silk);background:rgba(224,35,60,.09)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.tile{position:relative;aspect-ratio:1/1;overflow:hidden;border:1px solid rgba(223,230,242,.13);
+  clip-path:polygon(13px 0,100% 0,100% calc(100% - 13px),calc(100% - 13px) 100%,0 100%,0 13px)}
+.tile img{width:100%;height:100%;object-fit:cover;filter:grayscale(.8) contrast(1.08);transition:.55s}
+.tile:hover img{filter:grayscale(0) contrast(1);transform:scale(1.08)}
+.tile figcaption{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 12px;
+  background:linear-gradient(transparent,rgba(6,8,16,.95));font-family:var(--display);font-weight:700;font-size:13px}
+.tile figcaption em{display:block;font-style:normal;font-family:var(--mono);font-size:9px;color:var(--ash);margin-top:4px;letter-spacing:.09em;font-weight:400}
 
-.stat{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-.stat div{border:1px solid rgba(223,230,242,.15);padding:11px 15px;flex:1;min-width:120px}
-.stat b{display:block;font-family:var(--display);font-weight:800;font-size:23px;color:var(--crimson);letter-spacing:-.02em}
-.stat span{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ash);margin-top:5px;display:block;line-height:1.5}
-
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
-.chips span{
-  font-family:var(--mono);font-size:11px;padding:6px 11px;
-  border:1px solid rgba(223,230,242,.18);color:#c2cadb;transition:.25s;
-}
-.chips span:hover{border-color:var(--crimson);color:var(--silk)}
-
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:4px}
-.tile{position:relative;aspect-ratio:1/1;overflow:hidden;border:1px solid rgba(223,230,242,.12)}
-.tile img{width:100%;height:100%;object-fit:cover;filter:grayscale(.75) contrast(1.05);transition:.55s}
-.tile:hover img{filter:grayscale(0) contrast(1);transform:scale(1.07)}
-.tile figcaption{
-  position:absolute;left:0;right:0;bottom:0;padding:22px 12px 11px;
-  background:linear-gradient(transparent,rgba(6,8,16,.94));
-  font-family:var(--display);font-weight:700;font-size:13px;
-}
-.tile figcaption em{display:block;font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--ash);margin-top:3px;letter-spacing:.08em;font-weight:400}
-
-/* ---------- mobile ---------- */
-@media(max-width:860px){
-  header{padding:18px 20px}
-  .meta{font-size:9px}
-  #panel{top:auto;left:0;width:100%;height:86vh;border-left:none;border-top:1px solid rgba(224,35,60,.4);transform:translateY(102%)}
+@media(max-width:960px){
+  header{padding:14px 16px}#minimark{width:28px;height:28px}.meta{font-size:8px}
+  .webcorner{width:112px;height:112px}
+  #rail{bottom:0;left:0;transform:none;width:100%;max-width:100%;clip-path:none;border-left:none;border-right:none;border-bottom:none}
+  #rail button{padding:11px 15px;flex-shrink:0}
+  #panel{top:auto;left:0;width:100%;height:88vh;border-left:none;border-top:1px solid rgba(224,35,60,.45);transform:translateY(102%)}
   #panel.on{transform:translateY(0)}
-  .phead{padding:24px 22px 18px}
-  .phead h2{font-size:27px}
-  #close{top:20px;right:20px}
-  .pbody{padding:22px 22px 50px}
-  #connector{display:none}
-  .node text.lbl{font-size:14px}
-  .node text.sub{font-size:9px}
-  #hint{font-size:9px;letter-spacing:.14em;width:80%;justify-content:center}
+  .phead{padding:24px 20px 18px}.phead h3{font-size:27px}
+  #close{top:20px;right:18px}
+  .pbody{padding:20px 20px 26px}
+  #connector,#shooter,#shootertip{display:none}
+  .node text.lbl{font-size:14px}.node text.sub{font-size:9px}
 }
-
 @media(prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.08s!important}
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.09s!important}
   .strand{stroke-dashoffset:0!important}
 }
 </style>
 </head>
 <body>
 
-<div id="glow"></div>
-<div id="grain"></div>
+<div id="glow"></div><div id="grain"></div>
 
-<header>
-  <div class="nameblock">
-    <h1>Joyal Nilesh <em>Shah</em></h1>
-    <p>Artistic Engineer → Strategic Leadership</p>
+<div id="cover">
+  <div id="coverdots"></div><div id="slashes"></div>
+  <svg class="webcorner wc-tl" viewBox="0 0 180 180"><g class="cw"></g></svg>
+  <svg class="webcorner wc-tr" viewBox="0 0 180 180"><g class="cw"></g></svg>
+  <svg class="webcorner wc-bl" viewBox="0 0 180 180"><g class="cw"></g></svg>
+  <svg class="webcorner wc-br" viewBox="0 0 180 180"><g class="cw"></g></svg>
+  <div class="cover-inner">
+    <svg id="seal" viewBox="0 0 100 100"><g class="sealart"></g><text x="50" y="59" text-anchor="middle">JS</text></svg>
+    <div class="eyebrow-top">Interactive R&#233;sum&#233; &#183; MDI Gurgaon</div>
+    <h1><span>Joyal Nilesh</span><span>Shah</span></h1>
+    <div class="rule"></div>
+    <p class="tag">Artistic Engineer turning into a strategist. I look for <b>hidden utility in simple things</b> &#8212; leftover paint on a wall, an idle table in an ERP schema.</p>
+    <button id="enter">Enter the web</button>
+  </div>
+</div>
+
+<header id="topbar">
+  <div class="hleft">
+    <svg id="minimark" viewBox="0 0 100 100"><g class="sealart"></g></svg>
+    <div class="nameblock">
+      <h2>Joyal Nilesh <em>Shah</em></h2>
+      <p>Artistic Engineer &#8594; Strategic Leadership</p>
+    </div>
   </div>
   <div class="meta">
     <div>PGDM BUSINESS ANALYTICS <span>'26</span></div>
-    <div>MDI GURGAON · <span>26PGBN010</span></div>
+    <div>MDI GURGAON &#183; <span>26PGBN010</span></div>
   </div>
 </header>
 
 <div id="stage">
   <svg id="web" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-label="Interactive web resume">
     <g id="weblayer">
-      <g id="strands"></g>
-      <g id="dewdrops"></g>
+      <g id="strands"></g><g id="dewdrops"></g>
+      <path id="shooter" d=""></path>
+      <circle id="shootertip" r="3" cx="-50" cy="-50"></circle>
       <path id="connector" d=""></path>
       <g id="nodes"></g>
       <g id="hub">
@@ -249,221 +294,224 @@ svg#web{width:100%;height:100%;display:block}
   </svg>
 </div>
 
-<div id="hint"><b></b> Pull a strand to open it</div>
-
+<nav id="rail" aria-label="Sections"></nav>
 <div id="scrim"></div>
 
 <aside id="panel" role="dialog" aria-modal="true" aria-labelledby="ptitle">
   <div class="phead">
+    <svg class="pcorner" viewBox="0 0 116 116"><g id="pcornerweb"></g></svg>
     <span class="eyebrow" id="peyebrow"></span>
-    <h2 id="ptitle"></h2>
-    <button id="close" aria-label="Close">✕</button>
+    <h3 id="ptitle"></h3>
   </div>
+  <button id="close" aria-label="Close">&#10005;</button>
   <div class="pbody" id="pbody"></div>
+  <div class="pfoot">
+    <button id="prevbtn"><i>&#8592; Previous</i><b></b></button>
+    <button id="nextbtn"><i>Next &#8594;</i><b></b></button>
+  </div>
 </aside>
 
 <script>
 const CX=500, CY=350, IMG='https://joyal0501.github.io/CreativeCv/images/';
-const rad = d => (d-0)*Math.PI/180;
+const svgns='http://www.w3.org/2000/svg';
+const rad=d=>d*Math.PI/180;
 
-/* ---------------- build the orb web ---------------- */
+/* ---------- original orb-web seal ---------- */
+(function(){
+  let h='';
+  for(let i=0;i<6;i++){ const a=rad(i*60-90);
+    h+=`<line class="sr" x1="50" y1="50" x2="${(50+Math.cos(a)*44).toFixed(1)}" y2="${(50+Math.sin(a)*44).toFixed(1)}"/>`; }
+  [20,30,40].forEach((r,ri)=>{
+    let d='';
+    for(let i=0;i<=6;i++){ const a=rad(i*60-90), am=rad(i*60-120);
+      const x=50+Math.cos(a)*r, y=50+Math.sin(a)*r;
+      if(i===0) d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;
+      else d+=` Q${(50+Math.cos(am)*r*.86).toFixed(1)} ${(50+Math.sin(am)*r*.86).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`; }
+    h+=`<path class="${ri===2?'sw':'sr'}" d="${d}"/>`;
+  });
+  h+=`<circle class="sw" cx="50" cy="50" r="14.5"/>`;
+  document.querySelectorAll('.sealart').forEach(el=>el.innerHTML=h);
+})();
+
+/* ---------- corner web ornaments ---------- */
+(function(){
+  let h='';
+  for(let i=0;i<=6;i++){ const a=rad(i*15);
+    h+=`<line x1="0" y1="0" x2="${(Math.cos(a)*240).toFixed(1)}" y2="${(Math.sin(a)*240).toFixed(1)}"/>`; }
+  [40,68,98,130,166].forEach(r=>{
+    let d='';
+    for(let i=0;i<=6;i++){ const a=rad(i*15), am=rad(i*15-7.5);
+      const x=Math.cos(a)*r,y=Math.sin(a)*r;
+      if(i===0) d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;
+      else d+=` Q${(Math.cos(am)*r*.9).toFixed(1)} ${(Math.sin(am)*r*.9).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`; }
+    h+=`<path d="${d}"/>`;
+  });
+  document.querySelectorAll('.cw').forEach(el=>el.innerHTML=h);
+  let ph='';
+  for(let i=0;i<=6;i++){ const a=rad(90+i*15);
+    ph+=`<line x1="116" y1="0" x2="${(116+Math.cos(a)*160).toFixed(1)}" y2="${(Math.sin(a)*160).toFixed(1)}"/>`; }
+  [34,58,84,112].forEach(r=>{
+    let d='';
+    for(let i=0;i<=6;i++){ const a=rad(90+i*15), am=rad(90+i*15-7.5);
+      const x=116+Math.cos(a)*r,y=Math.sin(a)*r;
+      if(i===0) d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;
+      else d+=` Q${(116+Math.cos(am)*r*.9).toFixed(1)} ${(Math.sin(am)*r*.9).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`; }
+    ph+=`<path d="${d}"/>`;
+  });
+  document.getElementById('pcornerweb').innerHTML=ph;
+})();
+
+/* ---------- ink slashes ---------- */
+(function(){
+  const box=document.getElementById('slashes');
+  [18,34,63,81].forEach((top,i)=>{
+    const el=document.createElement('i');
+    el.style.top=top+'%'; el.style.animationDelay=(0.15+i*0.1)+'s';
+    box.appendChild(el);
+  });
+})();
+
+/* ---------- the orb web ---------- */
 const SPOKES=24, RINGS=[74,124,178,236,300,372,452,540];
 const strands=document.getElementById('strands');
-const svgns='http://www.w3.org/2000/svg';
 const jitter=[]; for(let i=0;i<SPOKES;i++) jitter.push((Math.random()-.5)*4.5);
 const pt=(a,r,i)=>[CX+Math.cos(rad(a))*(r+(jitter[i%SPOKES]||0)), CY+Math.sin(rad(a))*(r+(jitter[i%SPOKES]||0))];
-
-const radialPaths=[];
+const radialPaths=[], ringPaths=[];
 for(let i=0;i<SPOKES;i++){
-  const a=i*(360/SPOKES);
-  const [x,y]=pt(a,620,i);
+  const a=i*(360/SPOKES); const [x,y]=pt(a,620,i);
   const p=document.createElementNS(svgns,'path');
   p.setAttribute('d',`M${CX} ${CY} L${x.toFixed(1)} ${y.toFixed(1)}`);
-  p.setAttribute('class','strand radial');
-  p.dataset.angle=a;
+  p.setAttribute('class','strand radial'); p.dataset.angle=a;
   strands.appendChild(p); radialPaths.push(p);
 }
-const ringPaths=[];
 RINGS.forEach((r,ri)=>{
   let d='';
   for(let i=0;i<=SPOKES;i++){
-    const a=i*(360/SPOKES);
-    const [x,y]=pt(a,r,i);
-    if(i===0){ d+=`M${x.toFixed(1)} ${y.toFixed(1)}`; }
-    else{
-      const am=a-(360/SPOKES)/2;
-      const sag=r*(0.90-ri*0.006);
-      const [mx,my]=pt(am,sag,i);
-      d+=` Q${mx.toFixed(1)} ${my.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`;
-    }
+    const a=i*(360/SPOKES); const [x,y]=pt(a,r,i);
+    if(i===0) d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;
+    else{ const am=a-7.5, sag=r*(0.90-ri*0.006); const [mx,my]=pt(am,sag,i);
+      d+=` Q${mx.toFixed(1)} ${my.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`; }
   }
   const p=document.createElementNS(svgns,'path');
   p.setAttribute('d',d); p.setAttribute('class','strand ring');
   strands.appendChild(p); ringPaths.push(p);
 });
-
-/* dew drops sitting on the silk */
-const dewG=document.getElementById('dewdrops');
-const dews=[];
+const dewG=document.getElementById('dewdrops'), dews=[];
 for(let i=0;i<34;i++){
   const src=ringPaths[Math.floor(Math.random()*ringPaths.length)];
-  const L=src.getTotalLength(); const p=src.getPointAtLength(Math.random()*L);
+  const L=src.getTotalLength(), p=src.getPointAtLength(Math.random()*L);
   const c=document.createElementNS(svgns,'circle');
   c.setAttribute('cx',p.x.toFixed(1)); c.setAttribute('cy',p.y.toFixed(1));
   c.setAttribute('r',(Math.random()*1.5+.9).toFixed(1));
-  c.setAttribute('class','dew');
-  c.style.animationDelay=(Math.random()*5)+'s';
+  c.setAttribute('class','dew'); c.style.animationDelay=(Math.random()*5)+'s';
   dewG.appendChild(c); dews.push(c);
 }
-
-/* spin the web on load */
-[...radialPaths,...ringPaths].forEach((p,i)=>{
+[...radialPaths,...ringPaths].forEach(p=>{
   const L=p.getTotalLength();
   p.style.strokeDasharray=L; p.style.strokeDashoffset=L;
-  const isRadial=p.classList.contains('radial');
-  const delay=isRadial ? i*0.028 : 0.62 + (i-SPOKES)*0.13;
-  p.style.transition=`stroke-dashoffset ${isRadial?0.55:0.95}s cubic-bezier(.22,1,.36,1) ${delay}s`;
 });
-requestAnimationFrame(()=>requestAnimationFrame(()=>{
-  [...radialPaths,...ringPaths].forEach(p=>p.style.strokeDashoffset=0);
-  setTimeout(()=>dews.forEach(d=>d.classList.add('on')),2100);
-}));
 
-/* ---------------- content ---------------- */
+/* ---------- content ---------- */
 const DATA={
  education:{angle:270,label:'Education',sub:'9.21 / 10',eyebrow:'Where the base was spun',title:'Education',
   html:`
-  <div class="entry"><div class="top"><h3>PGDM — Business Analytics</h3><span class="yr">2026</span></div>
+  <div class="callout"><em>The headline</em>Graduated in the <b>top 0.27% of 20,160 students</b> across Gujarat Technological University &#8212; then went back for the business half of the equation.</div>
+  <div class="entry"><div class="top"><h4>PGDM &#8212; Business Analytics</h4><span class="yr">2026</span></div>
   <p class="org">Management Development Institute, Gurgaon</p>
   <ul><li>Current programme. Bridging engineering execution with <strong>commercial decision-making</strong>.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>B.E. Computer Engineering</h3><span class="yr">2024</span></div>
-  <p class="org">L. D. College of Engineering, GTU, Ahmedabad · CGPA 9.21 / 10</p>
-  <ul><li>Graduated in the <strong>top 0.27%</strong> of 20,160 students across Gujarat Technological University.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>XII, GSHSEB</h3><span class="yr">2020</span></div>
-  <p class="org">Shri V. R. Shah Memory Adarsh English School · 84.31%</p>
+  <div class="entry"><div class="top"><h4>B.E. Computer Engineering</h4><span class="yr">2024</span></div>
+  <p class="org">L. D. College of Engineering, GTU, Ahmedabad &#183; CGPA 9.21 / 10</p></div>
+  <div class="entry"><div class="top"><h4>XII, GSHSEB</h4><span class="yr">2020</span></div>
+  <p class="org">Shri V. R. Shah Memory Adarsh English School &#183; 84.31%</p>
   <ul><li>Ranked in the <strong>top 0.60%</strong> of 1.4 lakh HSC candidates statewide.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>X, GSHSEB</h3><span class="yr">2018</span></div>
-  <p class="org">Navanitlal Ranchhodlal Secondary School · 90.50%</p></div>
-
+  <div class="entry"><div class="top"><h4>X, GSHSEB</h4><span class="yr">2018</span></div>
+  <p class="org">Navanitlal Ranchhodlal Secondary School &#183; 90.50%</p></div>
   <div class="entry"><div class="stat">
-    <div><b>0.27%</b><span>Top rank band<br>GTU 2024</span></div>
+    <div><b>0.27%</b><span>Top band<br>GTU 2024</span></div>
     <div><b>20,160</b><span>Graduating cohort</span></div>
-    <div><b>1.4L</b><span>HSC cohort</span></div>
-  </div></div>`},
+    <div><b>1.4L</b><span>HSC cohort</span></div></div></div>`},
 
  work:{angle:330,label:'Experience',sub:'23 months',eyebrow:'Torrent Power Limited',title:'Experience',
   html:`
-  <div class="entry"><div class="top"><h3>Executive, IT Department</h3><span class="yr">Jul '24 – May '26</span></div>
-  <p class="org">Torrent Power Limited, Ahmedabad · 23 months</p>
-
+  <div class="callout"><em>The headline</em>Built the company's <b>first NL2SQL AI assistant</b> &#8212; then scrapped a different AI prototype of my own when a keyword check delivered the same ROI.</div>
+  <div class="entry"><div class="top"><h4>Executive, IT Department</h4><span class="yr">Jul '24 &#8211; May '26</span></div>
+  <p class="org">Torrent Power Limited, Ahmedabad &#183; 23 months</p>
   <p class="grouplabel">AI systems &amp; governance</p>
-  <ul>
-   <li>Spearheaded the company's <strong>first Metadata-Augmented NL2SQL AI Assistant</strong> and rebuilt Oracle 23ai cloud features around it.</li>
-   <li>Mapped <strong>40 critical ERP tables into 13 business verticals</strong> so the assistant could reason over the right domain.</li>
-   <li>Regulated role-based AI access and guardrails for <strong>DPDP compliance</strong>, cutting token cost along the way.</li>
-   <li>Shaped multiturn query design to anticipate user intent — a product mindset applied to an internal tool.</li>
-  </ul>
-
+  <ul><li>Spearheaded the first <strong>Metadata-Augmented NL2SQL AI Assistant</strong> and rebuilt Oracle 23ai cloud features around it.</li>
+  <li>Mapped <strong>40 critical ERP tables into 13 business verticals</strong> so the assistant reasoned over the right domain.</li>
+  <li>Regulated role-based AI access and guardrails for <strong>DPDP compliance</strong>, cutting token cost along the way.</li>
+  <li>Shaped multiturn query design to anticipate user intent &#8212; product thinking applied to an internal tool.</li></ul>
   <p class="grouplabel">Delivery &amp; reliability</p>
-  <ul>
-   <li>Established standardised <strong>deployment and testing pipelines</strong> across projects for reliable runs.</li>
-   <li>Built an in-house <strong>DORA delivery-performance tracker</strong>, avoiding a paid licence entirely.</li>
-   <li>Resolved pipeline concurrency conflicts, distributed server load and reclaimed space via a clean-up policy.</li>
-   <li>Integrated code quality, security and dependency scanning in a <strong>shift-left</strong> model to surface bugs early.</li>
-  </ul>
-
+  <ul><li>Established standardised <strong>deployment and testing pipelines</strong> across projects.</li>
+  <li>Built an in-house <strong>DORA delivery-performance tracker</strong>, avoiding a paid licence entirely.</li>
+  <li>Resolved pipeline concurrency conflicts, distributed server load, reclaimed space via a clean-up policy.</li>
+  <li>Integrated code quality, security and dependency scanning in a <strong>shift-left</strong> model.</li></ul>
   <p class="grouplabel">Automation</p>
-  <ul>
-   <li>Programmed Selenium to push firewall updates on <strong>CERT-In alerts</strong> and export SAP graphical bill URLs to PDF.</li>
-   <li>Wrote audit scripts for DLP violation tracking and auto-generated monthly DevOps activity reports.</li>
-  </ul>
-  </div>
-
+  <ul><li>Programmed Selenium to push firewall updates on <strong>CERT-In alerts</strong> and export SAP bill URLs to PDF.</li>
+  <li>Wrote audit scripts for DLP violation tracking and auto-generated monthly DevOps reports.</li></ul></div>
   <div class="entry"><div class="stat">
     <div><b>30%</b><span>Faster deployment<br>turnaround</span></div>
-    <div><b>40 → 13</b><span>ERP tables mapped<br>to verticals</span></div>
-    <div><b>1st</b><span>NL2SQL assistant<br>in the org</span></div>
-  </div></div>
+    <div><b>40 &#8594; 13</b><span>ERP tables mapped<br>to verticals</span></div>
+    <div><b>1st</b><span>NL2SQL assistant<br>in the org</span></div></div></div>`},
 
-  <div class="entry"><h3>The judgement call</h3>
-  <ul><li>Scrapped an over-engineered AI sentiment prototype after realising a <strong>simple keyword check delivered identical ROI</strong>. Commercial viability over technical fascination.</li></ul></div>`},
-
- credentials:{angle:30,label:'Toolkit',sub:'3 certifications',eyebrow:'What the web is made of',title:'Toolkit',
+ projects:{angle:90,label:'Projects',sub:'ISRO &#183; Mapex',eyebrow:'Things that shipped',title:'Projects',
   html:`
-  <div class="entry"><h3>Technical</h3>
-  <div class="chips"><span>Python</span><span>SQL / PL-SQL</span><span>Machine Learning</span><span>RAG &amp; NL2SQL</span><span>Oracle 23ai</span><span>Selenium</span><span>CI / CD</span><span>DORA Metrics</span><span>NLP</span><span>Clustering</span><span>Google Cloud</span><span>Android</span></div></div>
-
-  <div class="entry"><h3>Business</h3>
-  <div class="chips"><span>Porter's Five Forces</span><span>Blue Ocean</span><span>Product Management</span><span>Data Visualisation</span><span>Stakeholder Comms</span><span>Motion Graphics</span></div></div>
-
-  <div class="entry"><div class="top"><h3>Bloomberg Market Concepts</h3><span class="yr">2026</span></div>
-  <ul><li>Financial markets grounding through the industry-recognised BMC track.</li>
-  <li>Foundations in <strong>equity, fixed income and macroeconomic analysis</strong> via the terminal.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>Strategy for Consultants &amp; Business Analysts</h3><span class="yr">2026</span></div>
-  <ul><li>Built strategy cases using <strong>Porter's Five Forces and Blue Ocean</strong> frameworks.</li>
-  <li>Analysed niche-versus-growth trade-offs to quantify true business-impact valuation.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>IBM Data Science</h3><span class="yr">2022</span></div>
-  <ul><li>Evaluated <strong>3 SpaceX launch sites</strong> by success ratio and logistical proximity.</li>
-  <li>Data analysis, visualisation, machine learning and reporting on IBM Watson.</li></ul></div>`},
-
- projects:{angle:90,label:'Projects',sub:'ISRO · Mapex',eyebrow:'Things that shipped',title:'Projects',
-  html:`
-  <div class="entry"><div class="top"><h3>3D Object Detection &amp; Pose Estimation</h3><span class="yr">2024 · 18 wks</span></div>
+  <div class="callout"><em>The headline</em>Point clouds for ISRO, <b>4 lakh points of interest a year</b> pulled out of dashcam footage, and a disaster map that verified its own alerts.</div>
+  <div class="entry"><div class="top"><h4>3D Object Detection &amp; Pose Estimation</h4><span class="yr">2024 &#183; 18 wks</span></div>
   <p class="org">Space Applications Centre, ISRO</p>
   <ul><li>Built a detection and pose-estimation model driven by <strong>point-cloud clustering</strong>.</li>
-  <li>Met every prototype milestone across the full engagement.</li>
-  <li>Deepened Python and machine learning practice under research-grade constraints.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>Decoding POI</h3><span class="yr">2023 · 35 wks</span></div>
+  <li>Met every prototype milestone across the full engagement.</li></ul></div>
+  <div class="entry"><div class="top"><h4>Decoding POI</h4><span class="yr">2023 &#183; 35 wks</span></div>
   <p class="org">Mapex (formerly Azure)</p>
-  <ul><li>Classified <strong>25,000 signboard images</strong> captured by a 10 fps car-mounted camera rig.</li>
-  <li>Delivered <strong>85% accuracy</strong> while extracting over 4 lakh points of interest a year from raw footage.</li>
+  <ul><li>Classified <strong>25,000 signboard images</strong> from a 10 fps car-mounted camera rig.</li>
+  <li>Delivered <strong>85% accuracy</strong> extracting over 4 lakh points of interest a year from raw footage.</li>
   <li>Partnered with the ML engineer on deduplication and POI detection logic.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>Disaster Monitoring System</h3><span class="yr">2023</span></div>
-  <p class="org">Academic project</p>
-  <ul><li>Designed a <strong>Google Cloud</strong> hosted monitor plotting disaster impact onto Google Maps.</li>
-  <li>Built the Android reporting app plus an NLP model and clustering framework to verify incoming alerts.</li></ul></div>
-
+  <div class="entry"><div class="top"><h4>Disaster Monitoring System</h4><span class="yr">2023</span></div>
+  <ul><li>Designed a <strong>Google Cloud</strong> monitor plotting disaster impact onto Google Maps.</li>
+  <li>Built the Android reporting app plus an NLP model and clustering framework to verify alerts.</li></ul></div>
   <div class="entry"><div class="stat">
     <div><b>25K</b><span>Images classified</span></div>
     <div><b>85%</b><span>Extraction accuracy</span></div>
-    <div><b>4L+</b><span>POIs per year</span></div>
-  </div></div>`},
+    <div><b>4L+</b><span>POIs per year</span></div></div></div>`},
 
- leadership:{angle:150,label:'Leadership',sub:'₹1L raised',eyebrow:'Pulling other people in',title:'Leadership',
+ credentials:{angle:30,label:'Toolkit',sub:'3 certifications',eyebrow:'What the web is made of',title:'Toolkit',
   html:`
-  <div class="entry"><div class="top"><h3>Marketing Team, Innovator Club</h3><span class="yr">2021 – 22</span></div>
+  <div class="callout"><em>The headline</em>Engineering depth on one side, <b>Bloomberg terminal and Porter's Five Forces</b> on the other. The point is the overlap.</div>
+  <div class="entry"><h4>Technical</h4>
+  <div class="chips"><span>Python</span><span>SQL / PL-SQL</span><span>Machine Learning</span><span>RAG &amp; NL2SQL</span><span>Oracle 23ai</span><span>Selenium</span><span>CI / CD</span><span>DORA Metrics</span><span>NLP</span><span>Clustering</span><span>Google Cloud</span><span>Android</span></div></div>
+  <div class="entry"><h4>Business</h4>
+  <div class="chips"><span>Porter's Five Forces</span><span>Blue Ocean</span><span>Product Management</span><span>Data Visualisation</span><span>Stakeholder Comms</span><span>Motion Graphics</span></div></div>
+  <div class="entry"><div class="top"><h4>Bloomberg Market Concepts</h4><span class="yr">2026</span></div>
+  <ul><li>Foundations in <strong>equity, fixed income and macroeconomic analysis</strong> via the terminal.</li></ul></div>
+  <div class="entry"><div class="top"><h4>Strategy for Consultants &amp; Business Analysts</h4><span class="yr">2026</span></div>
+  <ul><li>Built cases on <strong>Porter's Five Forces and Blue Ocean</strong>, quantifying niche-versus-growth trade-offs.</li></ul></div>
+  <div class="entry"><div class="top"><h4>IBM Data Science</h4><span class="yr">2022</span></div>
+  <ul><li>Evaluated <strong>3 SpaceX launch sites</strong> by success ratio and logistical proximity on IBM Watson.</li></ul></div>`},
+
+ leadership:{angle:150,label:'Leadership',sub:'&#8377;1L raised',eyebrow:'Pulling other people in',title:'Leadership',
+  html:`
+  <div class="callout"><em>The headline</em>Raised <b>&#8377;1,00,000 for a college fest</b>, moved 5,000 people through it, and lifted club viewership 800% with motion graphics I made myself.</div>
+  <div class="entry"><div class="top"><h4>Marketing Team, Innovator Club</h4><span class="yr">2021 &#8211; 22</span></div>
   <p class="org">L. D. College of Engineering, Ahmedabad</p>
-  <ul><li>Coordinated fest <strong>IRADA</strong> — raised <strong>₹1,00,000 in sponsorships</strong> and engaged over 5,000 attendees.</li>
+  <ul><li>Coordinated fest <strong>IRADA</strong> &#8212; &#8377;1,00,000 in sponsorships, 5,000+ attendees.</li>
   <li>Pioneered motion graphics for club promotion, lifting viewership by <strong>800%</strong>.</li>
   <li>Moderated entrepreneurial shows and quizzes while managing a <strong>30-member team</strong>.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>NSS Rang Amaizi</h3><span class="yr">2023</span></div>
+  <div class="entry"><div class="top"><h4>NSS Rang Amaizi</h4><span class="yr">2023</span></div>
   <ul><li>Facilitated a street wall-painting drive supporting <strong>150+ participating groups</strong>.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>Global Alumni Convention</h3><span class="yr">2023</span></div>
+  <div class="entry"><div class="top"><h4>Global Alumni Convention</h4><span class="yr">2023</span></div>
   <ul><li>Presented an academic project to <strong>200 visiting alumni</strong>.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>Orientation &amp; Campus Induction</h3><span class="yr">2022</span></div>
+  <div class="entry"><div class="top"><h4>Orientation &amp; Campus Induction</h4><span class="yr">2022</span></div>
   <ul><li>Organised the session, campus tour and venue decoration for <strong>240 arriving students</strong>.</li></ul></div>
-
-  <div class="entry"><div class="top"><h3>Smart India Hackathon</h3><span class="yr">2023</span></div>
+  <div class="entry"><div class="top"><h4>Smart India Hackathon</h4><span class="yr">2023</span></div>
   <ul><li>Qualified in the <strong>top 30 of 150+ teams</strong> at the college round.</li></ul></div>
-
   <div class="entry"><div class="stat">
-    <div><b>₹1L</b><span>Sponsorship raised</span></div>
+    <div><b>&#8377;1L</b><span>Sponsorship raised</span></div>
     <div><b>5,000</b><span>Fest footfall</span></div>
-    <div><b>800%</b><span>Viewership lift</span></div>
-  </div></div>`},
+    <div><b>800%</b><span>Viewership lift</span></div></div></div>`},
 
  beyond:{angle:210,label:'Beyond',sub:'6 detours',eyebrow:'Off the terminal',title:'Beyond',
   html:`
+  <div class="callout"><em>The headline</em>Same instinct, different canvas. <b>Leftover paint becomes wall art</b> the way an idle ERP table becomes an AI training surface.</div>
   <div class="entry"><div class="tiles">
     <figure class="tile"><img src="${IMG}kashmir1.jpg" alt="Kashmir"><figcaption>System Cooling<em>Kashmir expeditions</em></figcaption></figure>
     <figure class="tile"><img src="${IMG}guitar.jpg" alt="Guitar"><figcaption>Bard in Training<em>C major, slowly</em></figcaption></figure>
@@ -472,97 +520,152 @@ const DATA={
     <figure class="tile"><img src="${IMG}uttarayan.png" alt="Uttarayan"><figcaption>Uttarayan Nights<em>Rooftop season</em></figcaption></figure>
     <figure class="tile"><img src="${IMG}casual.jpg" alt="Navratri"><figcaption>Fest Mode<em>Navratri</em></figcaption></figure>
   </div></div>
-
-  <div class="entry"><h3>Artistic frugality</h3>
-  <ul><li>Turns unused leftover paint into <strong>geometric wall art</strong> — the same instinct that finds hidden utility in an idle ERP table.</li></ul></div>
-
-  <div class="entry"><h3>Geopolitical affairs</h3>
+  <div class="entry"><h4>Geopolitical affairs</h4>
   <ul><li>Tracks domestic policy, crude oil price shifts and international affairs.</li>
   <li>Follows <strong>Indian defence</strong> developments, particularly capability-enhancement policy.</li></ul></div>`}
 };
+const ORDER=['education','work','projects','credentials','leadership','beyond'];
 
-/* ---------------- draw nodes ---------------- */
-const NR=260, nodesG=document.getElementById('nodes'), nodeEls={};
-Object.entries(DATA).forEach(([key,d],idx)=>{
-  const a=rad(d.angle);
+/* ---------- nodes on the web ---------- */
+const NR=260, nodesG=document.getElementById('nodes'), nodeEls={}, nodeList=[];
+ORDER.forEach(key=>{
+  const d=DATA[key], a=rad(d.angle);
   const x=CX+Math.cos(a)*NR, y=CY+Math.sin(a)*NR;
-  const lx=CX+Math.cos(a)*(NR+44), ly=CY+Math.sin(a)*(NR+44);
+  const lx=CX+Math.cos(a)*(NR+46), ly=CY+Math.sin(a)*(NR+46);
   let anchor='middle', dy1=0, dy2=15;
-  if(d.angle===270){ dy1=-6; dy2=11; }
-  else if(d.angle===90){ dy1=16; dy2=31; }
-  else if(d.angle<90||d.angle>270){ anchor='start'; dy1=0; dy2=15; }
-  else { anchor='end'; dy1=0; dy2=15; }
-
+  if(d.angle===270){ dy1=-7; dy2=10; }
+  else if(d.angle===90){ dy1=17; dy2=32; }
+  else if(d.angle<90||d.angle>270){ anchor='start'; }
+  else { anchor='end'; }
   const g=document.createElementNS(svgns,'g');
   g.setAttribute('class','node'); g.setAttribute('tabindex','0');
   g.setAttribute('role','button'); g.setAttribute('aria-label',d.label);
   g.style.transformOrigin=`${x}px ${y}px`;
-  g.style.animationDelay=(1.95+idx*0.09)+'s';
-  g.innerHTML=`
-    <circle class="pulse" cx="${x}" cy="${y}" r="18"></circle>
+  g.innerHTML=`<circle class="pulse" cx="${x}" cy="${y}" r="18"></circle>
     <circle class="disc" cx="${x}" cy="${y}" r="15"></circle>
     <circle class="core" cx="${x}" cy="${y}" r="4.5"></circle>
     <text class="lbl" x="${lx}" y="${ly+dy1}" text-anchor="${anchor}">${d.label}</text>
     <text class="sub" x="${lx}" y="${ly+dy2}" text-anchor="${anchor}">${d.sub}</text>`;
-  g.dataset.key=key; g.dataset.x=x; g.dataset.y=y; g.dataset.angle=d.angle;
-  nodesG.appendChild(g); nodeEls[key]=g;
-  setTimeout(()=>g.classList.add('in'),0);
-
-  const lightUp=on=>{
-    const r=document.querySelector(`.radial[data-angle="${d.angle}"]`);
-    if(r) r.classList.toggle('lit',on);
-  };
+  g.dataset.key=key; g.dataset.x=x; g.dataset.y=y;
+  nodesG.appendChild(g); nodeEls[key]=g; nodeList.push({key,x,y});
+  const lightUp=on=>{ const r=document.querySelector(`.radial[data-angle="${d.angle}"]`); if(r) r.classList.toggle('lit',on); };
   g.addEventListener('mouseenter',()=>lightUp(true));
   g.addEventListener('mouseleave',()=>{ if(!g.classList.contains('active')) lightUp(false); });
-  g.addEventListener('click',()=>open(key));
-  g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open(key);} });
+  g.addEventListener('click',()=>openPanel(key));
+  g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();openPanel(key);} });
 });
 
-/* ---------------- panel ---------------- */
+/* ---------- nav rail ---------- */
+const rail=document.getElementById('rail');
+ORDER.forEach((key,i)=>{
+  const b=document.createElement('button');
+  b.dataset.key=key;
+  b.innerHTML=`<i>${String(i+1).padStart(2,'0')}</i><b>${DATA[key].label}</b>`;
+  b.addEventListener('click',()=>openPanel(key));
+  rail.appendChild(b);
+});
+function syncRail(){
+  rail.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',b.dataset.key===current));
+}
+
+/* ---------- entrance ---------- */
+const cover=document.getElementById('cover'), stage=document.getElementById('stage'), topbar=document.getElementById('topbar');
+let spun=false;
+function spinWeb(){
+  if(spun) return; spun=true;
+  cover.classList.add('out'); topbar.classList.add('on'); stage.classList.add('on');
+  setTimeout(()=>cover.style.display='none',900);
+  [...radialPaths,...ringPaths].forEach((p,i)=>{
+    const isRadial=p.classList.contains('radial');
+    p.style.transition=`stroke-dashoffset ${isRadial?0.5:0.9}s cubic-bezier(.22,1,.36,1) ${isRadial?i*0.026:0.58+(i-SPOKES)*0.12}s`;
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    [...radialPaths,...ringPaths].forEach(p=>p.style.strokeDashoffset=0);
+  }));
+  setTimeout(()=>dews.forEach(d=>d.classList.add('on')),1900);
+  setTimeout(()=>document.getElementById('hub').classList.add('in'),1400);
+  nodeList.forEach((n,i)=>setTimeout(()=>nodeEls[n.key].classList.add('in'),1600+i*85));
+  setTimeout(()=>rail.classList.add('on'),2300);
+}
+document.getElementById('enter').addEventListener('click',e=>{e.stopPropagation();spinWeb();});
+cover.addEventListener('click',spinWeb);
+setTimeout(spinWeb,4200);
+
+/* ---------- panel ---------- */
 const panel=document.getElementById('panel'), scrim=document.getElementById('scrim'),
       pbody=document.getElementById('pbody'), ptitle=document.getElementById('ptitle'),
-      peyebrow=document.getElementById('peyebrow'), hint=document.getElementById('hint'),
-      connector=document.getElementById('connector');
+      peyebrow=document.getElementById('peyebrow'), connector=document.getElementById('connector'),
+      prevbtn=document.getElementById('prevbtn'), nextbtn=document.getElementById('nextbtn');
 let current=null;
 
-function open(key){
+function openPanel(key){
+  if(!spun) spinWeb();
   const d=DATA[key];
   if(current) nodeEls[current].classList.remove('active');
   document.querySelectorAll('.radial.lit').forEach(r=>r.classList.remove('lit'));
   current=key;
   nodeEls[key].classList.add('active');
-  const r=document.querySelector(`.radial[data-angle="${d.angle}"]`);
-  if(r) r.classList.add('lit');
-
+  const r=document.querySelector(`.radial[data-angle="${d.angle}"]`); if(r) r.classList.add('lit');
   const nx=+nodeEls[key].dataset.x, ny=+nodeEls[key].dataset.y;
-  connector.setAttribute('d',`M${nx} ${ny} Q${(nx+1000)/2} ${ny+26} 1000 ${ny}`);
+  connector.setAttribute('d',`M${nx} ${ny} Q${(nx+1000)/2} ${ny+28} 1000 ${ny}`);
   connector.classList.add('on');
-
   peyebrow.textContent=d.eyebrow;
   ptitle.textContent=d.title;
   pbody.innerHTML=d.html;
   pbody.scrollTop=0;
-  pbody.querySelectorAll('.entry').forEach((e,i)=>e.style.animationDelay=(0.12+i*0.07)+'s');
-  panel.classList.add('on'); scrim.classList.add('on'); hint.classList.add('gone');
-  document.getElementById('close').focus();
+  pbody.querySelectorAll('.entry,.callout').forEach((e,i)=>{
+    e.classList.add('reveal'); e.style.animationDelay=(0.1+i*0.07)+'s';
+  });
+  const idx=ORDER.indexOf(key);
+  const pk=ORDER[(idx-1+ORDER.length)%ORDER.length], nk=ORDER[(idx+1)%ORDER.length];
+  prevbtn.querySelector('b').textContent=DATA[pk].label;
+  nextbtn.querySelector('b').textContent=DATA[nk].label;
+  prevbtn.dataset.key=pk; nextbtn.dataset.key=nk;
+  panel.classList.add('on'); scrim.classList.add('on');
+  syncRail();
 }
-function close(){
-  panel.classList.remove('on'); scrim.classList.remove('on');
-  connector.classList.remove('on');
+function closePanel(){
+  panel.classList.remove('on'); scrim.classList.remove('on'); connector.classList.remove('on');
   document.querySelectorAll('.radial.lit').forEach(r=>r.classList.remove('lit'));
   if(current){ nodeEls[current].classList.remove('active'); nodeEls[current].focus(); current=null; }
+  syncRail();
 }
-document.getElementById('close').addEventListener('click',close);
-scrim.addEventListener('click',close);
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+function step(dir){
+  if(!current) return;
+  const idx=ORDER.indexOf(current);
+  openPanel(ORDER[(idx+dir+ORDER.length)%ORDER.length]);
+}
+prevbtn.addEventListener('click',()=>step(-1));
+nextbtn.addEventListener('click',()=>step(1));
+document.getElementById('close').addEventListener('click',closePanel);
+scrim.addEventListener('click',closePanel);
+document.addEventListener('keydown',e=>{
+  if(!spun) return;
+  if(e.key==='Escape'&&current) return closePanel();
+  if(current&&e.key==='ArrowRight') return step(1);
+  if(current&&e.key==='ArrowLeft') return step(-1);
+  const n=parseInt(e.key,10);
+  if(n>=1&&n<=6) openPanel(ORDER[n-1]);
+});
 
-/* ---------------- parallax ---------------- */
-const layer=document.getElementById('weblayer');
+/* ---------- parallax + silk shooter ---------- */
+const layer=document.getElementById('weblayer'), shooter=document.getElementById('shooter'),
+      tip=document.getElementById('shootertip'), websvg=document.getElementById('web');
 let px=0,py=0,tx=0,ty=0;
 window.addEventListener('mousemove',e=>{
-  tx=(e.clientX/window.innerWidth-.5)*-16;
-  ty=(e.clientY/window.innerHeight-.5)*-16;
+  tx=(e.clientX/window.innerWidth-.5)*-16; ty=(e.clientY/window.innerHeight-.5)*-16;
+  if(!spun||current||window.innerWidth<961){ shooter.classList.remove('on'); tip.classList.remove('on'); return; }
+  const box=websvg.getBoundingClientRect();
+  const sx=(e.clientX-box.left)/box.width*1000, sy=(e.clientY-box.top)/box.height*700;
+  let best=null,bd=1e9;
+  nodeList.forEach(n=>{ const dd=(n.x-sx)**2+(n.y-sy)**2; if(dd<bd){bd=dd;best=n;} });
+  if(best){
+    shooter.setAttribute('d',`M${best.x} ${best.y} Q${((best.x+sx)/2).toFixed(1)} ${((best.y+sy)/2+22).toFixed(1)} ${sx.toFixed(1)} ${sy.toFixed(1)}`);
+    tip.setAttribute('cx',sx.toFixed(1)); tip.setAttribute('cy',sy.toFixed(1));
+    shooter.classList.add('on'); tip.classList.add('on');
+  }
 });
+window.addEventListener('mouseleave',()=>{shooter.classList.remove('on');tip.classList.remove('on');});
 (function loop(){
   px+=(tx-px)*.055; py+=(ty-py)*.055;
   layer.style.transform=`translate(${px.toFixed(2)}px,${py.toFixed(2)}px)`;
